@@ -1,0 +1,63 @@
+.maindata {
+  background-color: rgb(190, 143, 183);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: xx-large;
+  color: white;
+  text-align: center;
+  width: 80%;
+}
+.city {
+  background-color: rgb(57, 124, 53);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.temp {
+  background-color: rgb(59, 48, 117);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.icon {
+  background-color: rgb(152, 18, 18);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.feel {
+  background-color: rgb(204, 220, 32);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.wind {
+  background-color: rgb(243, 183, 53);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.cloudy {
+  background-color: aqua;
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.humadity {
+  background-color: rgb(124, 20, 93);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.sunrise {
+  background-color: rgb(255, 255, 0);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}
+.sunset {
+  background-color: rgb(248, 5, 5);
+  width: 15rem;
+  height: 15rem;
+  flex-grow: 1;
+}

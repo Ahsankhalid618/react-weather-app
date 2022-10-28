@@ -1,0 +1,6 @@
+.clock{
+    background-color: rgb(152, 18, 18);
+    width: 15rem;
+    height: 15rem;
+    flex-grow: 1;
+}

@@ -1,0 +1,26 @@
+.main{
+    height: 5rem;
+    background-color: aqua;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 40rem;
+}
+.searchbox{
+    height: 2.5rem;
+    width: 85%;
+}
+.istclass{
+    color: red;
+    width: 85%;
+}
+
+.nd{
+    color: blue;
+    flex: auto;
+}
+.search{
+    color: red;
+    display: flex;
+    width: auto;
+}

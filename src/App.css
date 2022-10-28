@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.mainpage{
+    height: 100vh;
+}
+.searchComp{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 25vh;
+    background-color: blueviolet;
+    width: 100%;
+}
+.details{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    padding-left: 15%;
+}
