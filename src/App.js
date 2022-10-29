@@ -1,7 +1,7 @@
 import "./App.css";
 import Maindata from "./Components/Maindata";
 import Search from "./Components/Search";
-import Time from "./Components/Time";
+// import Time from "./Components/Time";
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
       <div className="details">
         <Maindata />
       </div>
-      <Time />
+      {/* <Time /> */}
     </div>
   );
 }

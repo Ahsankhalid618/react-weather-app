@@ -12,52 +12,70 @@
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .temp {
   background-color: rgb(59, 48, 117);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .icon {
   background-color: rgb(152, 18, 18);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .feel {
   background-color: rgb(204, 220, 32);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .wind {
   background-color: rgb(243, 183, 53);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .cloudy {
   background-color: aqua;
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
-.humadity {
+.humidity {
   background-color: rgb(124, 20, 93);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .sunrise {
   background-color: rgb(255, 255, 0);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
 .sunset {
   background-color: rgb(248, 5, 5);
   width: 15rem;
   height: 15rem;
   flex-grow: 1;
+  text-align: center;
+  padding-top: 5rem;
 }
