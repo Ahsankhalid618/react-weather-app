@@ -24,3 +24,9 @@
     display: flex;
     width: auto;
 }
+.details{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    padding-left: 15%;
+}
