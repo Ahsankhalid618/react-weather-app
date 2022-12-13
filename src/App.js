@@ -1,21 +1,29 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Maindata from "./Components/Maindata";
 import Search from "./Components/Search";
 
-// import Time from "./Components/Time";
-
 function App() {
   const [location, setLocation] = useState();
+  const [backgroundImageURL, setBackgroundImageURL] = useState("01n");
 
+  const handle = (e)=>{
+    setBackgroundImageURL(e);
+  }
+  
   return (
-    <div className="mainpage">
+    <div className="mainpage"
+    style={{
+      backgroundImage: `url("./pics/${backgroundImageURL}.jpg")`,
+      backgroundSize: "cover",
+    }}
+    >
       <div className="searchComp">
         <Search {...{ location, setLocation }} />
       </div>
-      <div className="details">
-        <Maindata city={location} />
-      </div>
+      
+        <Maindata city={location} setBackgroundImageURL={handle} />
+
     </div>
   );
 }
