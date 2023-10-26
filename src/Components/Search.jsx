@@ -20,7 +20,7 @@ export default function Search({ setLocation }) {
           <div className="search">
             <input
               value={city}
-              placeholder="Search your location..."
+              placeholder="Search your location"
               className="searchbox"
               onChange={(e) => setCity(e.target.value)}
             />
