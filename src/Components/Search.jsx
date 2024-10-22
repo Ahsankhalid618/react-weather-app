@@ -26,7 +26,7 @@ export default function Search({ setLocation }) {
             />
 
             <button className="nd" type="button" onClick={handlesubmit}>
-            <i class="fa fa-search" aria-hidden="true"></i>
+            <i className="fa fa-search" aria-hidden="true"></i>
             </button>
           </div>
         </form>

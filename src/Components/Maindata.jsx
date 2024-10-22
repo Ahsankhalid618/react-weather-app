@@ -90,7 +90,7 @@ export default function Maindata({ city = "london", setBackgroundImageURL }) {
               <div className="temp">
                 <span className="display">
                   {" "}
-                  {data.list[0].main.temp.toFixed(1)}&deg; <i class="fa-solid fa-temperature-full"></i>
+                  {data.list[0].main.temp.toFixed(1)}&deg; <i className="fa-solid fa-temperature-full"></i>
                 </span>{" "}
                 <br />{" "}
                 <span className="display1">
@@ -105,7 +105,7 @@ export default function Maindata({ city = "london", setBackgroundImageURL }) {
               <div className="acloudy">
                 <span className="icon1">
                   {data.list[0].main.temp_max.toFixed(1)}{" "}
-                  <i class="fa-solid fa-temperature-high"></i>
+                  <i className="fa-solid fa-temperature-high"></i>
                 </span>{" "}
                 <br /> <span className="icon2">High </span>
               </div>
@@ -130,13 +130,13 @@ export default function Maindata({ city = "london", setBackgroundImageURL }) {
               <div className="dcloudy">
                 <span className="icon1">
                   {data.list[0].main.temp_min.toFixed(1)}{" "}
-                  <i class="fa-solid fa-temperature-low"></i>
+                  <i className="fa-solid fa-temperature-low"></i>
                 </span>{" "}
                 <br /> <span className="icon2">Low</span>
               </div>
               <div className="ecloudy">
                 <span className="icon1">{data.list[0].main.humidity}%</span>
-                <i class="fa-solid fa-droplet-degree"></i>
+                <i className="fa-solid fa-droplet-degree"></i>
                 {" "}
                 <br /> <span className="icon2">Humadity</span>
               </div>
@@ -147,7 +147,7 @@ export default function Maindata({ city = "london", setBackgroundImageURL }) {
                     .add(timezone, "seconds")
                     .format("h:mm a")}{" "}
                     {/* <i class="fa-solid fa-temperature-low"></i> */}
-                    <i class="fa-solid fa-sunrise"></i>
+                    <i className="fa-solid fa-sunrise"></i>
                 </span>
                 <br/> 
                 <span className="icon2">Sunset</span>
