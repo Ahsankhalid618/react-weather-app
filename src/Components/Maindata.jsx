@@ -19,6 +19,7 @@ import "../Componentstyle/Main.css";
 
 const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   const [data, setData] = useState();
+  /* eslint-disable-next-line no-unused-vars */
   const [cityvalid, setCityvalid] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [searchValue, setSearchValue] = useState(city); // State for search input
