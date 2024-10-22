@@ -1,0 +1,48 @@
+:root {
+  --text-light: #333;
+  --text-dark: #fff;
+  --bg-light: #ffffff;
+  --bg-dark: #1a1a1a;
+  --toggle-shadow-light: rgba(0, 0, 0, 0.1);
+  --toggle-shadow-dark: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  background: none;
+  border: 2px solid var(--toggle-shadow-light);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+.theme-toggle.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+  border-color: var(--toggle-shadow-dark);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.theme-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--toggle-shadow-light);
+}
+
+.dark-mode .theme-toggle:focus {
+  box-shadow: 0 0 0 2px var(--toggle-shadow-dark);
+}
