@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from "react";
-// import Time from "./Time"
+import {
+  Sun,
+  Cloud,
+  Droplets,
+  Wind,
+  Sunrise,
+  Sunset,
+  ThermometerSun,
+  ThermometerSnowflake,
+  Search,
+  Moon,
+  CloudRain,
+  CloudSnow,
+  CloudDrizzle,
+} from "lucide-react";
 import moment from "moment";
 import "../Componentstyle/Main.css";
-export default function Maindata({ city = "london", setBackgroundImageURL }) {
+
+const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   const [data, setData] = useState();
   const [cityvalid, setCityvalid] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  const [searchValue, setSearchValue] = useState(city); // State for search input
 
-  // ()=>{setBackgroundImageURL(icon)
-  const Dweather = async (city) => {
+  const Dweather = async (cityName) => {
     const key = "24f4cabc9b1a10af6e3eeb4cc150a9ef";
-
     await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric&formatted=0`
+      `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
     )
       .then((response) => response.json())
       .then((actualData) => {
@@ -25,285 +40,180 @@ export default function Maindata({ city = "london", setBackgroundImageURL }) {
   };
 
   useEffect(() => {
-    Dweather(city);
+    Dweather(city); // Fetch weather data on component mount or city change
   }, [city]);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner" />
+      </div>
+    );
   }
-  // if (!data.weather) {
-  //   return <div>City "{city}" not recognized</div>;
-  // }
-  // const icon = ()=>{
-  //   props.setBackgroundImageURL(data.list[0].weather[0].icon)
-  // }
-  // const icon = {setBackgroundImageURL(data.list[0].weather[0].icon)};
-  setBackgroundImageURL(data.list[0].weather[0].icon);
-  // setBackgroundImageURL(icon);
-  // const imgicon = ()=>{setBackgroundImageURL(icon)};
 
-  const icons = `./icons/${data.list[0].weather[0].icon}.svg`;
-  const icond1 = `./icons/${data.list[7].weather[0].icon}.svg`;
-  const icond2 = `./icons/${data.list[15].weather[0].icon}.svg`;
-  const icond3 = `./icons/${data.list[23].weather[0].icon}.svg`;
-  const icond4 = `./icons/${data.list[31].weather[0].icon}.svg`;
-  const icond5 = `./icons/${data.list[39].weather[0].icon}.svg`;
+  setBackgroundImageURL(data.list[0].weather[0].icon); // Set the background image based on weather icon
 
-  const sunrise = data.city.sunrise;
-  const sunset = data.city.sunset;
-  const timezone = data.city.timezone;
+  const handleSearch = () => {
+    Dweather(searchValue); // Fetch new data when search icon is clicked
+  };
+
+  // Function to map weather condition to Lucide icon
+  const getWeatherIcon = (weather) => {
+    switch (weather) {
+      case "Clear":
+        return <Sun className="forecast-icon" />;
+      case "Clouds":
+        return <Cloud className="forecast-icon" />;
+      case "Rain":
+        return <CloudRain className="forecast-icon" />;
+      case "Snow":
+        return <CloudSnow className="forecast-icon" />;
+      case "Drizzle":
+        return <CloudDrizzle className="forecast-icon" />;
+      default:
+        return <Cloud className="forecast-icon" />; // Default to Cloud icon
+    }
+  };
+
   return (
-    <>
-      <div className="start">
-        <div
-          className="newpage"
-          style={
-            {
-              // backgroundImage: `url("./pics/${data.list[0].weather[0].icon}.jpg")`,
-              // backgroundSize: "cover",
-            }
-          }
-        >
-          <div className="city">
-          <div className="daily">
-            Daily Forcast
+    <div className="weather-container">
+      <div className="main-content">
+        {/* Header Controls */}
+        <div className="header-controls">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search location..."
+              className="search-input"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)} // Update search input value
+            />
+            <Search className="search-icon" onClick={handleSearch} /> {/* Trigger search */}
           </div>
-          <div className="dailydata">
-             <span className="name">{data.city.name}</span>
-           
-            <br />
-            <span className="citydate">
+          <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
+            {isDark ? (
+              <Sun className="sun-icon" size={24} />
+            ) : (
+              <Moon className="moon-icon" size={24} />
+            )}
+          </button>
+        </div>
+
+        {/* Main Weather Card */}
+        <div className="weather-card">
+          <div className="city-info">
+            <h1 className="city-name">{data.city.name}</h1>
+            <p className="date">
               {moment
                 .utc(new Date().setTime(data.list[0].dt * 1000))
-                .add(timezone, "seconds")
-                .format("dddd, MMMM Do YYYY, ")}
-            </span>
-
+                .add(data.city.timezone, "seconds")
+                .format("dddd, MMMM Do YYYY")}
+            </p>
           </div>
-                     </div>
-         
-          <div className="maindata">
-            {/* {!cityValid && <span>City "{city}" not found</span>} */}
 
-            <div className="temper">
-              <img src={icons} alt="not found" />
-              <div className="temp">
-                <span className="display">
-                  {" "}
-                  {data.list[0].main.temp.toFixed(1)}&deg; <i class="fa-solid fa-temperature-full"></i>
-                </span>{" "}
-                <br />{" "}
-                <span className="display1">
-                  {" "}
-                  {data.list[0].weather[0].description}
-                </span>
-              </div>
-            </div>
-
-            <div className="icon">
-              {/* <img src={link} alt="not found" />{" "} */}
-              <div className="acloudy">
-                <span className="icon1">
-                  {data.list[0].main.temp_max.toFixed(1)}{" "}
-                  <i class="fa-solid fa-temperature-high"></i>
-                </span>{" "}
-                <br /> <span className="icon2">High </span>
-              </div>
-              <div className="bcloudy">
-                <span className="icon1">
-                  {" "}
-                  0{data.list[0].wind.speed.toFixed()}_km/h 
-                  
-                </span>{" "}
-                <br /> <span className="icon2">Wind Speed</span>
-              </div>
-              <div className="ccloudy">
-                <span className="icon1">
-                  {moment
-                    .utc(sunrise, "X")
-                    .add(timezone, "seconds")
-                    .format("h:mm a")}{" "}
-                </span>
-                <br />
-                <span className="icon2">Sunrise</span>
-              </div>
-              <div className="dcloudy">
-                <span className="icon1">
-                  {data.list[0].main.temp_min.toFixed(1)}{" "}
-                  <i class="fa-solid fa-temperature-low"></i>
-                </span>{" "}
-                <br /> <span className="icon2">Low</span>
-              </div>
-              <div className="ecloudy">
-                <span className="icon1">{data.list[0].main.humidity}%</span>
-                <i class="fa-solid fa-droplet-degree"></i>
-                {" "}
-                <br /> <span className="icon2">Humadity</span>
-              </div>
-              <div id="sunset" className="fcloudy">
-                <span className="icon1">
-                  {moment
-                    .utc(sunset, "X")
-                    .add(timezone, "seconds")
-                    .format("h:mm a")}{" "}
-                    {/* <i class="fa-solid fa-temperature-low"></i> */}
-                    <i class="fa-solid fa-sunrise"></i>
-                </span>
-                <br/> 
-                <span className="icon2">Sunset</span>
+          <div className="current-weather">
+            <div className="weather-main">
+              <div className="weather-display">
+              <img
+                  src={`./icons/${data.list[0].weather[0].icon}.svg`}
+                  alt="weather"
+                  className="weather-icon"
+                />
+                <div className="temperature-container">
+                  <h2 className="temperature">
+                    {data.list[0].main.temp.toFixed(1)}°C
+                  </h2>
+                  <p className="weather-description">
+                    {data.list[0].weather[0].description}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-<div className="daily">
-  Five Days Forecast
-</div>
-          <div className="dailyweather">
-            <div className="day">
-              <span className="wday">
-                {moment(new Date().setTime(data.list[7].dt * 1000)).format(
-                  "ddd"
-                )}
-              </span>
-              <br /> <img src={icond1} alt="not found" />
-              <br />
-              <span className="head">Temp </span>{" "}
-              <span className="val">
-                {data.list[7].main.temp.toFixed(1)} C&deg;{" "}
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Feel like </span>{" "}
-              <span className="val">
-                {data.list[7].main.feels_like.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Moist </span>{" "}
-              <span className="val">
-                {data.list[7].main.humidity.toFixed()} %
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">{data.list[7].weather[0].main}</span>
-            </div>
 
-            <div className="day">
-              <span className="wday">
-                {moment(new Date().setTime(data.list[15].dt * 1000)).format(
-                  "ddd"
-                )}
-              </span>{" "}
-              <br />
-              <img src={icond2} alt="not found" />
-              <br /> <span className="head">Temp </span>{" "}
-              <span className="val">
-                {data.list[15].main.temp.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Feel like </span>{" "}
-              <span className="val">
-                {data.list[15].main.feels_like.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Moist</span>{" "}
-              <span className="val">
-                {" "}
-                {data.list[15].main.humidity.toFixed()} %
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">{data.list[15].weather[0].main}</span>
-            </div>
-
-            <div className="day">
-              <span className="wday">
-                {moment(new Date().setTime(data.list[23].dt * 1000)).format(
-                  "ddd"
-                )}
-              </span>
-              <br /> <img src={icond3} alt="not found" />
-              <br /> <span className="head">Temp</span>{" "}
-              <span className="val">
-                {" "}
-                {data.list[23].main.temp.toFixed(1)} C&deg;
-              </span>
-              <br /> <br />
-              <span className="head">Feel like </span>{" "}
-              <span className="val">
-                {data.list[23].main.feels_like.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Moist </span>{" "}
-              <span className="val">
-                {data.list[23].main.humidity.toFixed()} %
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">{data.list[23].weather[0].main}</span>
-            </div>
-
-            <div className="day">
-              <span className="wday">
-                {moment(new Date().setTime(data.list[31].dt * 1000)).format(
-                  "ddd"
-                )}
-              </span>{" "}
-              <br /> <img src={icond4} alt="not found" />
-              <br /> <span className="head">Temp</span>{" "}
-              <span className="val">
-                {" "}
-                {data.list[31].main.temp.toFixed(1)} C&deg;
-              </span>
-              <br /> <br />
-              <span className="head">Feel like </span>{" "}
-              <span className="val">
-                {data.list[31].main.feels_like.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Moist </span>{" "}
-              <span className="val">
-                {data.list[31].main.humidity.toFixed()} %
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">{data.list[31].weather[0].main}</span>
-            </div>
-
-            <div className="day">
-              <span className="wday">
-                {moment(new Date().setTime(data.list[39].dt * 1000)).format(
-                  "ddd"
-                )}
-              </span>
-              <br />
-              <img src={icond5} alt="not found" />
-              <br /> <span className="head">Temp </span>{" "}
-              <span className="val">
-                {data.list[39].main.temp.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Feel like </span>{" "}
-              <span className="val">
-                {data.list[39].main.feels_like.toFixed(1)} C&deg;
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">Moist </span>{" "}
-              <span className="val">
-                {data.list[39].main.humidity.toFixed()} %
-              </span>{" "}
-              <br />
-              <br />
-              <span className="head">{data.list[39].weather[0].main}</span>
-            </div>
+          {/* Weather Details Grid */}
+          <div className="weather-details">
+            {[
+              {
+                icon: <ThermometerSun className="detail-icon high-temp" />,
+                label: "High",
+                value: `${data.list[0].main.temp_max.toFixed(1)}°C`,
+              },
+              {
+                icon: <ThermometerSnowflake className="detail-icon low-temp" />,
+                label: "Low",
+                value: `${data.list[0].main.temp_min.toFixed(1)}°C`,
+              },
+              {
+                icon: <Wind className="detail-icon wind" />,
+                label: "Wind",
+                value: `${data.list[0].wind.speed.toFixed(1)} km/h`,
+              },
+              {
+                icon: <Droplets className="detail-icon humidity" />,
+                label: "Humidity",
+                value: `${data.list[0].main.humidity}%`,
+              },
+              {
+                icon: <Sunrise className="detail-icon sunrise" />,
+                label: "Sunrise",
+                value: moment
+                  .utc(data.city.sunrise, "X")
+                  .add(data.city.timezone, "seconds")
+                  .format("h:mm a"),
+              },
+              {
+                icon: <Sunset className="detail-icon sunset" />,
+                label: "Sunset",
+                value: moment
+                  .utc(data.city.sunset, "X")
+                  .add(data.city.timezone, "seconds")
+                  .format("h:mm a"),
+              },
+            ].map((item, index) => (
+              <div key={index} className="detail-card">
+                <div className="detail-header">
+                  {item.icon}
+                  <span className="detail-label">{item.label}</span>
+                </div>
+                <div className="detail-value">{item.value}</div>
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* 5-Day Forecast */}
+        <h3 className="forecast-title">5-Day Forecast</h3>
+        <div className="forecast-grid">
+          {[7, 15, 23, 31, 39].map((index) => (
+            <div key={index} className="forecast-card">
+              <h4 className="forecast-day">
+                {moment(new Date().setTime(data.list[index].dt * 1000)).format(
+                  "ddd"
+                )}
+              </h4>
+              {/* Use Lucide icon for weather forecast */}
+              {getWeatherIcon(data.list[index].weather[0].main)}
+              <div className="forecast-details">
+                <div className="forecast-temp">
+                  {data.list[index].main.temp.toFixed(1)}°C
+                </div>
+                <div className="forecast-feels-like">
+                  Feels like {data.list[index].main.feels_like.toFixed(1)}°C
+                </div>
+                <div className="forecast-humidity">
+                  Humidity {data.list[index].main.humidity}%
+                </div>
+                <div className="forecast-condition">
+                  {data.list[index].weather[0].main}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+export default Maindata;
