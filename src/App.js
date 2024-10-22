@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "./App.css";
 import Maindata from "./Components/Maindata";
+/* eslint-disable-next-line no-unused-vars */
 import Search from "./Components/Search";
 import { ThemeProvider } from "./Components/ThemeContext.jsx";
 import ThemeToggle from "./Components/ThemeToggle.jsx";
 
 function App() {
+  /* eslint-disable-next-line no-unused-vars */
   const [location, setLocation] = useState();
   const [backgroundImageURL, setBackgroundImageURL] = useState("01n");
 
