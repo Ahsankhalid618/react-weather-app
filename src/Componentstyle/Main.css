@@ -58,6 +58,7 @@
 }
 
 .theme-toggle {
+  margin-top: 0.2rem;
   margin-left: 1rem;
   padding: 0.5rem;
   border-radius: 9999px;
@@ -312,10 +313,12 @@
   
   .theme-toggle {
     margin-left: 0;
+    margin-top: 0.2rem;
   }
   
   .search-container {
-    width: 100%;
+    width: 80%;
+    margin-right: 3.8rem;
   }
   
   .weather-display {
