@@ -25,7 +25,12 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   const [searchValue, setSearchValue] = useState(city); // State for search input
 
   const Dweather = async (cityName) => {
-    const key = "24f4cabc9b1a10af6e3eeb4cc150a9ef";
+    const key = process.env.REACT_APP_API_KEY;
+    console.log("API Key:", key); // Add this line to log the key
+    if (!key) {
+      console.error("API key is not defined in environment variables");
+      return;
+    }
     await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
     )
@@ -37,6 +42,10 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
         } else {
           setCityvalid(false);
         }
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+        setCityvalid(false);
       });
   };
 
