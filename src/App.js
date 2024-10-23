@@ -20,7 +20,7 @@ function App() {
 
       // get your API KEY: https://my.locationiq.com/dashboard/?firstLogin=1#accesstoken
 
-      const GEOLOCATION_API_KEY = "pk.8a5c18c4b30439387c76d708aa36784b";
+      const GEOLOCATION_API_KEY = process.env.GEO_API;
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       const response = await fetch(
