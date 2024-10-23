@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Maindata from "./Components/Maindata";
 /* eslint-disable-next-line no-unused-vars */
@@ -14,6 +14,26 @@ function App() {
   const handle = (e) => {
     setBackgroundImageURL(e);
   };
+
+  useEffect(() => {
+    async function getCity(position) {
+
+      // get your API KEY: https://my.locationiq.com/dashboard/?firstLogin=1#accesstoken
+
+      const GEOLOCATION_API_KEY = "";
+      
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      const response = await fetch(
+        `https://us1.locationiq.com/v1/reverse?key=${GEOLOCATION_API_KEY}&lat=${latitude}&lon=${longitude}&format=json`
+      );
+      const json = await response.json();
+      setLocation(json?.address?.city)
+    }
+
+
+    navigator.geolocation.getCurrentPosition(getCity);
+  }, []);
 
   return (
     <ThemeProvider>
