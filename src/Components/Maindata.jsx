@@ -25,12 +25,8 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   const [searchValue, setSearchValue] = useState(city); // State for search input
 
   const Dweather = async (cityName) => {
+    // get WEATHER_API_KEY = https://home.openweathermap.org/api_keys
     const key = process.env.REACT_APP_API_KEY;
-    console.log("API Key:", key); // Add this line to log the key
-    if (!key) {
-      console.error("API key is not defined in environment variables");
-      return;
-    }
     await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
     )
@@ -50,8 +46,13 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   };
 
   useEffect(() => {
-    Dweather(city); // Fetch weather data on component mount or city change
+    Dweather(city);
+    setSearchValue(city); // Fetch weather data on component mount or city change
   }, [city]);
+
+  useEffect(() => {
+    setBackgroundImageURL(data?.list[0].weather[0].icon); // Set background in useEffect
+  }, [data, setBackgroundImageURL]);
 
   if (!data) {
     return (
@@ -60,8 +61,6 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
       </div>
     );
   }
-
-  setBackgroundImageURL(data.list[0].weather[0].icon); // Set the background image based on weather icon
 
   const handleSearch = () => {
     Dweather(searchValue); // Fetch new data when search icon is clicked
@@ -98,7 +97,8 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)} // Update search input value
             />
-            <Search className="search-icon" onClick={handleSearch} /> {/* Trigger search */}
+            <Search className="search-icon" onClick={handleSearch} />{" "}
+            {/* Trigger search */}
           </div>
           <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
             {isDark ? (
@@ -124,7 +124,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
           <div className="current-weather">
             <div className="weather-main">
               <div className="weather-display">
-              <img
+                <img
                   src={`./icons/${data.list[0].weather[0].icon}.svg`}
                   alt="weather"
                   className="weather-icon"
