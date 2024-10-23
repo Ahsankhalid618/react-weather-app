@@ -80,6 +80,12 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch(); // Call the search when the ENTER key is pressed
+    }
+  };
+
   return (
     <div className="weather-container">
       <div className="main-content">
@@ -92,6 +98,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
               className="search-input"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)} // Update search input value
+              onKeyDown={handleKeyDown}
             />
             <Search className="search-icon" onClick={handleSearch} />{" "}
             {/* Trigger search */}
