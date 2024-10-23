@@ -38,10 +38,6 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
         } else {
           setCityvalid(false);
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching weather data:", error);
-        setCityvalid(false);
       });
   };
 
