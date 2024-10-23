@@ -26,7 +26,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
 
   const Dweather = async (cityName) => {
     // get WEATHER_API_KEY = https://home.openweathermap.org/api_keys
-    const key = "1fb69b225b8aa7f06de8e47bece3e8be";
+    const key = process.env.REACT_APP_API_KEY;
     await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
     )
