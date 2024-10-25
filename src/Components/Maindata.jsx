@@ -22,6 +22,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   /* eslint-disable-next-line no-unused-vars */
   const [cityvalid, setCityvalid] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [loading, setLoading] = useState(true)
   const [searchValue, setSearchValue] = useState(city); // State for search input
 
   const Dweather = async (cityName) => {
