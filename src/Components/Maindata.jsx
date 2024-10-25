@@ -58,8 +58,10 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
     );
   }
 
-  const handleSearch = () => {
-    Dweather(searchValue); // Fetch new data when search icon is clicked
+  const handleSearch = async () => {
+    setLoading(true)
+    await Dweather(searchValue); // Fetch new data when search icon is clicked
+    setLoading(false)
   };
 
   // Function to map weather condition to Lucide icon
@@ -100,7 +102,13 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
               onChange={(e) => setSearchValue(e.target.value)} // Update search input value
               onKeyDown={handleKeyDown}
             />
-            <Search className="search-icon" onClick={handleSearch} />{" "}
+            <div className="search-controls" >
+              {loading && (
+                <div
+                  className="searchLoader"></div>
+              )}
+              <Search className="search-icon" onClick={handleSearch} /> {/* Trigger search */}
+            </div>
             {/* Trigger search */}
           </div>
           <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
