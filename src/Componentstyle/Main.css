@@ -49,12 +49,37 @@
   outline: none;
 }
 
-.search-icon {
+.search-controls {
   position: absolute;
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.searchLoader {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.search-icon {
   color: var(--text-tertiary);
+  cursor: pointer;
 }
 
 .theme-toggle {

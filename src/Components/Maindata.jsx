@@ -22,6 +22,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   /* eslint-disable-next-line no-unused-vars */
   const [cityvalid, setCityvalid] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [searchValue, setSearchValue] = useState(city); // State for search input
 
   const Dweather = async (cityName) => {
@@ -58,8 +59,10 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
     );
   }
 
-  const handleSearch = () => {
-    Dweather(searchValue); // Fetch new data when search icon is clicked
+  const handleSearch = async () => {
+    setLoading(true)
+    await Dweather(searchValue); // Fetch new data when search icon is clicked
+    setLoading(false)
   };
 
   // Function to map weather condition to Lucide icon
@@ -100,7 +103,13 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
               onChange={(e) => setSearchValue(e.target.value)} // Update search input value
               onKeyDown={handleKeyDown}
             />
-            <Search className="search-icon" onClick={handleSearch} />{" "}
+            <div className="search-controls" >
+              {loading && (
+                <div
+                  className="searchLoader"></div>
+              )}
+              <Search className="search-icon" onClick={handleSearch} /> {/* Trigger search */}
+            </div>
             {/* Trigger search */}
           </div>
           <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
