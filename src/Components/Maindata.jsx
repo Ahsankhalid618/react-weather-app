@@ -22,12 +22,13 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   /* eslint-disable-next-line no-unused-vars */
   const [cityvalid, setCityvalid] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [searchValue, setSearchValue] = useState(city); // State for search input
 
   const Dweather = async (cityName) => {
     // get WEATHER_API_KEY = https://home.openweathermap.org/api_keys
-    const key = process.env.REACT_APP_API_KEY;
+    const key = process.env.REACT_APP_WEATHER_API_KEY;
+    console.log("key" + key)
     await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
     )
