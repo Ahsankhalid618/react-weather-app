@@ -1,241 +1,102 @@
 import React, { useState, useEffect } from "react";
-import {
-  Sun,
-  Cloud,
-  Droplets,
-  Wind,
-  Sunrise,
-  Sunset,
-  ThermometerSun,
-  ThermometerSnowflake,
-  Search,
-  Moon,
-  CloudRain,
-  CloudSnow,
-  CloudDrizzle,
-} from "lucide-react";
-import moment from "moment";
+
 import "../Componentstyle/Main.css";
+import Graph from "./Graph";
+import WeatherCard from "./WeatherCard";
+
+import { Dweather } from "../helper/fetchData";
+import ForecastCard from "./ForecastCard";
+import Header from "./Header";
 
 const Maindata = ({ city = "london", setBackgroundImageURL }) => {
-  const [data, setData] = useState();
-  /* eslint-disable-next-line no-unused-vars */
-  const [cityvalid, setCityvalid] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const [searchValue, setSearchValue] = useState(city); // State for search input
+    const [data, setData] = useState(null);
+    /* eslint-disable-next-line no-unused-vars */
+    const [cityValid, setCityValid] = useState(false);
+    const [isDark, setIsDark] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [searchValue, setSearchValue] = useState(city); // State for search input
+    // const [showGraph, setShowGraph] = useState(true);
 
-  const Dweather = async (cityName) => {
-    // get WEATHER_API_KEY = https://home.openweathermap.org/api_keys
-    const key = process.env.REACT_APP_API_KEY;
-    await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
-    )
-      .then((response) => response.json())
-      .then((actualData) => {
-        if (actualData.city) {
-          setCityvalid(true);
-          setData(actualData);
-        } else {
-          setCityvalid(false);
+    useEffect(() => {
+        async function fetchWether() {
+            const data = await Dweather(city);
+            if (!data) {
+                setCityValid(false);
+            }
+            setCityValid(true);
+            setData(data);
+            setSearchValue(city); // Fetch weather data on component mount or city change
         }
-      });
-  };
+        fetchWether();
+    }, [city]);
 
-  useEffect(() => {
-    Dweather(city);
-    setSearchValue(city); // Fetch weather data on component mount or city change
-  }, [city]);
+    useEffect(() => {
+        setBackgroundImageURL(data?.list[0].weather[0].icon); // Set background in useEffect
+    }, [data, setBackgroundImageURL]);
 
-  useEffect(() => {
-    setBackgroundImageURL(data?.list[0].weather[0].icon); // Set background in useEffect
-  }, [data, setBackgroundImageURL]);
+    const handleSearch = async () => {
+        setLoading(true);
+        const data = await Dweather(searchValue); // Fetch new data when search icon is clicked
 
-  if (!data) {
+        if (data) {
+            setData(data);
+        }
+        setLoading(false);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleSearch(); // Call the search when the ENTER key is pressed
+        }
+    };
+
+    if (!data) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner" />
+            </div>
+        );
+    }
+
     return (
-      <div className="loading-container">
-        <div className="loading-spinner" />
-      </div>
-    );
-  }
-
-  const handleSearch = async () => {
-    setLoading(true)
-    await Dweather(searchValue); // Fetch new data when search icon is clicked
-    setLoading(false)
-  };
-
-  // Function to map weather condition to Lucide icon
-  const getWeatherIcon = (weather) => {
-    switch (weather) {
-      case "Clear":
-        return <Sun className="forecast-icon" />;
-      case "Clouds":
-        return <Cloud className="forecast-icon" />;
-      case "Rain":
-        return <CloudRain className="forecast-icon" />;
-      case "Snow":
-        return <CloudSnow className="forecast-icon" />;
-      case "Drizzle":
-        return <CloudDrizzle className="forecast-icon" />;
-      default:
-        return <Cloud className="forecast-icon" />; // Default to Cloud icon
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      handleSearch(); // Call the search when the ENTER key is pressed
-    }
-  };
-
-  return (
-    <div className="weather-container">
-      <div className="main-content">
-        {/* Header Controls */}
-        <div className="header-controls">
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search location..."
-              className="search-input"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)} // Update search input value
-              onKeyDown={handleKeyDown}
-            />
-            <div className="search-controls" >
-              {loading && (
-                <div
-                  className="searchLoader"></div>
-              )}
-              <Search className="search-icon" onClick={handleSearch} /> {/* Trigger search */}
-            </div>
-            {/* Trigger search */}
-          </div>
-          <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
-            {isDark ? (
-              <Sun className="sun-icon" size={24} />
-            ) : (
-              <Moon className="moon-icon" size={24} />
-            )}
-          </button>
-        </div>
-
-        {/* Main Weather Card */}
-        <div className="weather-card">
-          <div className="city-info">
-            <h1 className="city-name">{data.city.name}</h1>
-            <p className="date">
-              {moment
-                .utc(new Date().setTime(data.list[0].dt * 1000))
-                .add(data.city.timezone, "seconds")
-                .format("dddd, MMMM Do YYYY")}
-            </p>
-          </div>
-
-          <div className="current-weather">
-            <div className="weather-main">
-              <div className="weather-display">
-                <img
-                  src={`./icons/${data.list[0].weather[0].icon}.svg`}
-                  alt="weather"
-                  className="weather-icon"
+        <div className="weather-container">
+            <div className="main-content">
+                {/* Header Controls */}
+                <Header
+                    searchValue={searchValue}
+                    setIsDark={setIsDark}
+                    setSearchValue={setSearchValue}
+                    handleSearch={handleSearch}
+                    handleKeyDown={handleKeyDown}
+                    loading={loading}
+                    isDark={isDark}
                 />
-                <div className="temperature-container">
-                  <h2 className="temperature">
-                    {data.list[0].main.temp.toFixed(1)}°C
-                  </h2>
-                  <p className="weather-description">
-                    {data.list[0].weather[0].description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Weather Details Grid */}
-          <div className="weather-details">
-            {[
-              {
-                icon: <ThermometerSun className="detail-icon high-temp" />,
-                label: "High",
-                value: `${data.list[0].main.temp_max.toFixed(1)}°C`,
-              },
-              {
-                icon: <ThermometerSnowflake className="detail-icon low-temp" />,
-                label: "Low",
-                value: `${data.list[0].main.temp_min.toFixed(1)}°C`,
-              },
-              {
-                icon: <Wind className="detail-icon wind" />,
-                label: "Wind",
-                value: `${data.list[0].wind.speed.toFixed(1)} km/h`,
-              },
-              {
-                icon: <Droplets className="detail-icon humidity" />,
-                label: "Humidity",
-                value: `${data.list[0].main.humidity}%`,
-              },
-              {
-                icon: <Sunrise className="detail-icon sunrise" />,
-                label: "Sunrise",
-                value: moment
-                  .utc(data.city.sunrise, "X")
-                  .add(data.city.timezone, "seconds")
-                  .format("h:mm a"),
-              },
-              {
-                icon: <Sunset className="detail-icon sunset" />,
-                label: "Sunset",
-                value: moment
-                  .utc(data.city.sunset, "X")
-                  .add(data.city.timezone, "seconds")
-                  .format("h:mm a"),
-              },
-            ].map((item, index) => (
-              <div key={index} className="detail-card">
-                <div className="detail-header">
-                  {item.icon}
-                  <span className="detail-label">{item.label}</span>
+                {/* Main Weather Card */}
+                <WeatherCard data={data} />
+                {/* 5-Day Forecast */}
+                <span className="forecast-title-container">
+                    <h3 className="forecast-title">5-Day Forecast</h3>
+                    {/* <button
+                        className="primary-btn"
+                        onClick={() => setShowGraph((s) => !s)}
+                    >
+                        {showGraph ? "show 5 day forcast" : "24-hour graph"}
+                    </button> */}
+                </span>
+                <div className="forecast-grid">
+                    {[7, 15, 23, 31, 39].map((index) => (
+                        <ForecastCard data={data} index={index} key={index} />
+                    ))}
                 </div>
-                <div className="detail-value">{item.value}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* 5-Day Forecast */}
-        <h3 className="forecast-title">5-Day Forecast</h3>
-        <div className="forecast-grid">
-          {[7, 15, 23, 31, 39].map((index) => (
-            <div key={index} className="forecast-card">
-              <h4 className="forecast-day">
-                {moment(new Date().setTime(data.list[index].dt * 1000)).format(
-                  "ddd"
-                )}
-              </h4>
-              {/* Use Lucide icon for weather forecast */}
-              {getWeatherIcon(data.list[index].weather[0].main)}
-              <div className="forecast-details">
-                <div className="forecast-temp">
-                  {data.list[index].main.temp.toFixed(1)}°C
-                </div>
-                <div className="forecast-feels-like">
-                  Feels like {data.list[index].main.feels_like.toFixed(1)}°C
-                </div>
-                <div className="forecast-humidity">
-                  Humidity {data.list[index].main.humidity}%
-                </div>
-                <div className="forecast-condition">
-                  {data.list[index].weather[0].main}
-                </div>
-              </div>
+                {/* {!showGraph ? (
+                
+                ) : (
+                    <Graph />
+                )} */}
             </div>
-          ))}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Maindata;
