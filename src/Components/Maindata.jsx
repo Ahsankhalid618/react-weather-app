@@ -13,6 +13,7 @@ import {
   CloudRain,
   CloudSnow,
   CloudDrizzle,
+  Heart
 } from "lucide-react";
 import moment from "moment";
 import "../Componentstyle/Main.css";
@@ -24,33 +25,53 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
   const [isDark, setIsDark] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState(city);
+  const [state, setState] = useState("");
 
-  const Dweather = async (cityName) => {
-    const key = process.env.REACT_APP_API_KEY;
-    await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}&units=metric&formatted=0`
-    )
-      .then((response) => response.json())
-      .then(async (actualData) => {
-        if (actualData.city) {
-          setCityvalid(true);
-          setData(actualData);
-          await fetchAqiData(actualData.city.coord.lat, actualData.city.coord.lon);
-        } else {
-          setCityvalid(false);
-        }
-      });
+  const getCoordinates = async (cityName) => {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${process.env.REACT_APP_API_KEY}&units=metric`);
+    const data = await response.json();
+    if (data.coord) {
+      return { lat: data.coord.lat, lon: data.coord.lon };
+    } else {
+      throw new Error('City not found');
+    }
   };
 
+  const Dweather = async (cityName) => {
+    try {
+      const { lat, lon } = await getCoordinates(cityName);
+      const key = process.env.REACT_APP_API_KEY;
+
+      const weatherResponse = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${key}&units=metric`
+      );
+      const actualData = await weatherResponse.json();
+
+      if (actualData.city) {
+        setCityvalid(true);
+        setData(actualData);
+        await fetchAqiData(lat, lon); // Use the coordinates here
+      } else {
+        setCityvalid(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setCityvalid(false);
+    }
+  };
+  
   const fetchAqiData = async (lat, lon) => {
     const key = process.env.REACT_APP_AQI_API_KEY; // Your AQI API key
-    await fetch(
+    const response = await fetch(
       `http://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${lon}&key=${key}`
-    )
-      .then((response) => response.json())
-      .then((aqiData) => {
-        setAqiData(aqiData);
-      });
+    );
+    const aqiData = await response.json();
+    console.log(aqiData);
+    if (aqiData.status === "success") {
+      setAqiData(aqiData.data);
+    } else {
+      console.error("Failed to fetch AQI data", aqiData);
+    }
   };
 
   useEffect(() => {
@@ -99,8 +120,14 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
     }
   };
 
-  const aqiLevel = aqiData.list[0].main.aqi; // AQI value
-  const aqiDescription = ["Good", "Fair", "Moderate", "Poor", "Very Poor"][aqiLevel - 1];
+  const aqiLevel = aqiData.current.pollution.aqius; // Adjusted for AirVisual response
+  const aqiDescription = ["Good", "Fair", "Moderate", "Poor", "Very Poor"][
+    aqiLevel >= 0 && aqiLevel <= 50 ? 0 :
+    aqiLevel > 50 && aqiLevel <= 100 ? 1 :
+    aqiLevel > 100 && aqiLevel <= 150 ? 2 :
+    aqiLevel > 150 && aqiLevel <= 200 ? 3 :
+    4
+  ]; // Adjusted index based on AQI levels
 
   return (
     <div className="weather-container">
@@ -121,7 +148,7 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
             </div>
           </div>
           <button onClick={() => setIsDark(!isDark)} className="theme-toggle">
-            {isDark ? <Sun className="sun-icon" size={24} /> : <Moon className="moon-icon" size={24} />}
+            {isDark ? (<Sun className="sun-icon" size={24} />) : (<Moon className="moon-icon" size={24} />)}
           </button>
         </div>
 
@@ -155,16 +182,58 @@ const Maindata = ({ city = "london", setBackgroundImageURL }) => {
 
           {/* Weather Details Grid */}
           <div className="weather-details">
-            {/* Other weather details... */}
-            <div className="detail-card">
+          {[
+            {
+              icon: <ThermometerSun className="detail-icon high-temp" />,
+              label: "High",
+              value: `${data.list[0].main.temp_max.toFixed(1)}°C`,
+            },
+            {
+              icon: <ThermometerSnowflake className="detail-icon low-temp" />,
+              label: "Low",
+              value: `${data.list[0].main.temp_min.toFixed(1)}°C`,
+            },
+            {
+              icon: <Wind className="detail-icon wind" />,
+              label: "Wind",
+              value: `${data.list[0].wind.speed.toFixed(1)} km/h`,
+            },
+            {
+              icon: <Droplets className="detail-icon humidity" />,
+              label: "Humidity",
+              value: `${data.list[0].main.humidity}%`,
+            },
+            {
+              icon: <Sunrise className="detail-icon sunrise" />,
+              label: "Sunrise",
+              value: moment
+                .utc(data.city.sunrise, "X")
+                .add(data.city.timezone, "seconds")
+                .format("h:mm a"),
+            },
+            {
+              icon: <Sunset className="detail-icon sunset" />,
+              label: "Sunset",
+              value: moment
+                .utc(data.city.sunset, "X")
+                .add(data.city.timezone, "seconds")
+                .format("h:mm a"),
+            },
+            {
+              icon: <Heart className="detail-icon aqi" />, // Use a suitable icon for AQI
+              label: "AQI",
+              value: `${aqiDescription} (${aqiLevel})`, // Display AQI level and description
+            },
+          ].map((item, index) => (
+            <div key={index} className="detail-card">
               <div className="detail-header">
-                <Droplets className="detail-icon aqi" />
-                <span className="detail-label">AQI</span>
+                {item.icon}
+                <span className="detail-label">{item.label}</span>
               </div>
-              <div className="detail-value">{aqiDescription} ({aqiLevel})</div>
+              <div className="detail-value">{item.value}</div>
             </div>
-            {/* Other weather details... */}
-          </div>
+          ))}
+        </div>
         </div>
 
         {/* 5-Day Forecast */}
