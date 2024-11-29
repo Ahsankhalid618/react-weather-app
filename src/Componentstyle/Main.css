@@ -135,10 +135,23 @@
 
 .weather-card-grid {
     display: grid;
-    grid-template-rows: repeat(2, 1fr);
+    /* grid-template-rows: repeat(2, 1fr); */
     grid-template-columns: repeat(4, 1fr);
-    row-gap: 1rem;
-    column-gap: 1rem;
+    grid-auto-rows: auto;
+
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+@media screen and (max-width: 1024px) {
+    .graph-container {
+        grid-column: 1 /-1 !important;
+        grid-row: 2 / span 3 !important;
+    }
+
+    .current-weather {
+        grid-column-end: -1;
+    }
 }
 
 .city-info {
@@ -157,18 +170,20 @@
     color: var(--text-secondary);
 }
 
-.current-weather {
+/* .current-weather {
     grid-column-start: 0;
     grid-column-end: 1;
-}
+} */
 
 /* graph */
 .graph-container {
-    grid-row: 1/-1;
-    grid-column: 2/-1;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    grid-row: 1 / span 2;
+    grid-column: 2 / -1;
+
     /* padding: 1rem 2rem; */
     /* background-color: #484848; */
 }
@@ -212,6 +227,11 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 1rem;
+}
+
+.custom-tick {
+    fill: var(--text-primary);
+    font-weight: bold;
 }
 
 .detail-card {

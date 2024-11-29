@@ -29,6 +29,7 @@ function getTempArrayForGraph(data) {
             time,
             temp: data.main.temp,
             date,
+            weather: data.weather[0].main,
         };
     });
 }

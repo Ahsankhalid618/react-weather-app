@@ -1,20 +1,21 @@
 import { Cloud, CloudDrizzle, CloudRain, CloudSnow, Sun } from "lucide-react";
 
 // Function to map weather condition to Lucide icon
-const getWeatherIcon = (weather) => {
+const getWeatherIcon = (weather = "Rain", props) => {
+    // console.log(...props);
     switch (weather) {
         case "Clear":
-            return <Sun className="forecast-icon" />;
+            return <Sun className="forecast-icon" {...props} />;
         case "Clouds":
-            return <Cloud className="forecast-icon" />;
+            return <Cloud className="forecast-icon" {...props} />;
         case "Rain":
-            return <CloudRain className="forecast-icon" />;
+            return <CloudRain className="forecast-icon" {...props} />;
         case "Snow":
-            return <CloudSnow className="forecast-icon" />;
+            return <CloudSnow className="forecast-icon" {...props} />;
         case "Drizzle":
-            return <CloudDrizzle className="forecast-icon" />;
+            return <CloudDrizzle className="forecast-icon" {...props} />;
         default:
-            return <Cloud className="forecast-icon" />; // Default to Cloud icon
+            return <Cloud className="forecast-icon" {...props} />; // Default to Cloud icon
     }
 };
 
